@@ -1,0 +1,9 @@
+scrapy==2.13.3
+# pinned versions for reproducibility
+scrapy-playwright==0.0.44
+playwright==1.47.0
+python-dotenv==1.0.1
+SQLAlchemy==1.4.49
+psycopg2-binary==2.9.11
+pytest==7.4.2
+alembic==1.11.1

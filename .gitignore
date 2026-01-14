@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+projectzero.db
+output/
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Docker
+*.env
+
+# Pytest
+.pytest_cache/
+
+# Temporary files
+*.swp
