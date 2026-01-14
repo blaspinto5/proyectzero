@@ -1,4 +1,5 @@
 import re
+import urllib.parse
 import scrapy
 from scrapy_playwright.page import PageMethod
 
@@ -41,6 +42,52 @@ def parse_price(text):
             return float(re.findall(r"\d+", s)[0])
         except Exception:
             return None
+
+
+def extract_product(selector, base_url=None):
+    def first(selectors):
+        for s in selectors:
+            v = selector.css(s).get()
+            if v:
+                return v.strip()
+        return None
+
+    title = first(["h1.product_name::text", "h1[itemprop='name']::text", "h1::text", "h1.product-title::text"]) or selector.css("title::text").get()
+
+    # price: raw visible text and a content attr fallback used by some templates
+    price = first(["div.product-prices .current-price span.price::text", "span.price::text", "span.regular-price::text"]) or None
+    price_content = selector.css("div.product-prices .current-price span.price::attr(content)").get() or selector.css("meta[property='product:price:amount']::attr(content)").get()
+
+    # prefer the full HTML block and extract its visible text
+    desc_html = selector.css("div[id^='product-description-short']").get()
+    if desc_html:
+        from parsel import Selector as ParselSelector
+
+        try:
+            description = ParselSelector(desc_html).xpath('string(.)').get().strip()
+        except Exception:
+            description = ""
+    else:
+        description = first(["div.product-description::text", "#description::text", ".description::text"]) or ""
+
+    images = selector.css("ul.product-images img.thumb::attr(data-image-large-src)").getall()
+    if not images:
+        images = selector.css("ul.product-images img.thumb::attr(src)").getall()
+    if not images:
+        images = selector.css("div.product-cover img::attr(src)").getall()
+
+    # join relative URLs when base_url provided
+    if base_url and images:
+        images = [urllib.parse.urljoin(base_url, x) for x in images]
+
+    return {
+        "url": base_url or None,
+        "titulo": title.strip() if title else None,
+        "price": price.strip() if isinstance(price, str) else price,
+        "price_content": price_content,
+        "description": description.strip() if description else None,
+        "images": images,
+    }
 
 
 class N1GSpider(scrapy.Spider):
@@ -100,29 +147,18 @@ class N1GSpider(scrapy.Spider):
             yield scrapy.Request(response.urljoin(next_sel), callback=self.parse)
 
     def parse_product(self, response):
-        def first(selectors):
-            for s in selectors:
-                v = response.css(s).get()
-                if v:
-                    return v.strip()
-            return None
+        sel = response.selector
+        item = extract_product(sel, base_url=response.url)
 
-        title = first(["h1::text", "h1.product-title::text", ".product-title::text", ".titulo::text", ".title::text"]) or response.css("title::text").get()
-        # keep raw price string (do not convert as requested)
-        price_raw = first([".price::text", ".product-price::text", ".precio::text", ".price-number::text"]) or response.css("meta[property='product:price:amount']::attr(content)").get()
-        price = price_raw.strip() if price_raw else None
-
-        # stock: try to read explicit stock count rendered dynamically
+        # stock extraction (keep earlier heuristics)
+        stock = None
         stock_text = None
         for s in (".si-items::text", ".si-product-page .si-items::text", ".si-items", ".stock::text", ".availability::text", ".disponible::text"):
             v = response.css(s).get()
             if v:
                 stock_text = v
                 break
-
-        stock = None
         if stock_text:
-            # extract digits
             m = re.search(r"(\d+)", stock_text.replace(".", ""))
             if m:
                 try:
@@ -130,51 +166,36 @@ class N1GSpider(scrapy.Spider):
                 except Exception:
                     stock = None
             else:
-                # heuristic: presence of text means available
                 stock = 1
 
+        # attach stock and compatibility fields expected elsewhere
+        item["stock"] = stock
+        item["stock_image"] = None
+
+        # category heuristic
         category = response.css(".breadcrumb a::text").getall()
-        category = category[-1].strip() if category else None
-        description = first([".description::text", ".product-description::text", "#description::text"]) or ""
-        images = [response.urljoin(x) for x in response.css("img::attr(src)").getall()]
-
-        # attempt to extract a stock-related image (e.g. progress bar or badge near stock element)
-        stock_image = None
-        stock_img_sel_candidates = [
-            ".si-outer img::attr(src)",
-            ".si-product-page .si-outer img::attr(src)",
-            ".stock img::attr(src)",
-            ".product-stock img::attr(src)",
-        ]
-        for s in stock_img_sel_candidates:
-            v = response.css(s).get()
-            if v:
-                stock_image = response.urljoin(v)
-                break
-
-        item = {
-            "url": response.url,
-            "titulo": title,
-            # raw price string kept
-            "precio": price,
-            "stock": stock,
-            "stock_image": stock_image,
-            "category": category,
-            "description": description.strip() if description else None,
-            "images": images,
-        }
+        item["category"] = category[-1].strip() if category else None
 
         # compute a basic score: availability + inverse price + promo keywords
         score = 0
         score += 50 if stock else 0
-        if price:
-            score += int(50 / (1 + price))  # lower price => higher contribution
+        numeric_price = None
+        if item.get("price_content"):
+            try:
+                numeric_price = float(re.sub(r"[^0-9.]", "", item["price_content"]))
+            except Exception:
+                numeric_price = None
+        if numeric_price:
+            score += int(50 / (1 + numeric_price))
         promo = 0
-        desc_text = (title or "") + " " + (description or "")
+        desc_text = (item.get("titulo") or "") + " " + (item.get("description") or "")
         for kw in ("oferta", "descuento", "nuevo", "rebaja", "promocion"):
             if kw in desc_text.lower():
                 promo += 10
         score = min(100, score + promo)
         item["score"] = score
+
+        # keep compatibility key name used by pipelines
+        item["precio"] = item.get("price") or None
 
         yield item
