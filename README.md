@@ -119,8 +119,8 @@ He añadido `run_local.ps1` en la raíz del proyecto para preparar un `virtualen
 - Pipelines: normalización, scoring, Postgres upsert (o SQLite fallback), CSV y JSON incremental atómico.
 - Tests: suite con `pytest` que cubre parsers y pipelines.
 
-[![CI](https://github.com/<owner>/<repo>/actions/workflows/ci.yml/badge.svg)](https://github.com/<owner>/<repo>/actions)
-[![Pytest](https://img.shields.io/badge/tests-passing-brightgreen)](#)
+[![CI](https://github.com/blaspinto5/proyectzero/actions/workflows/ci.yml/badge.svg)](https://github.com/blaspinto5/proyectzero/actions)
+[![Pytest](https://img.shields.io/badge/tests-passing-brightgreen)](https://github.com/blaspinto5/proyectzero/actions)
 
 ![demo](demo.svg)
 
