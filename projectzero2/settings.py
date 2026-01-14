@@ -5,12 +5,26 @@ BOT_NAME = "projectzero2"
 SPIDER_MODULES = ["projectzero2.spiders"]
 NEWSPIDER_MODULE = "projectzero2.spiders"
 
-# Download handlers for scrapy-playwright
-DOWNLOAD_HANDLERS = {
-    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-}
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+import os
+
+# Allow disabling scrapy-playwright explicitly via env var for local/testing.
+if os.environ.get("DISABLE_PLAYWRIGHT") == "1":
+    DOWNLOAD_HANDLERS = {}
+else:
+    # Download handlers for scrapy-playwright (only configure if available)
+    try:
+        import scrapy_playwright  # type: ignore
+
+        DOWNLOAD_HANDLERS = {
+            "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+            "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+        }
+        TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+    except Exception:
+        # scrapy-playwright not available or incompatible in this environment;
+        # fall back to default HTTP download handlers so spiders can run without JS rendering.
+        DOWNLOAD_HANDLERS = {}
+        # use default reactor (don't override)
 
 # `scrapy_playwright` recent releases provide a download handler instead of a
 # separate middleware module. The middleware module may be missing in the
