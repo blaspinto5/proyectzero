@@ -1,270 +1,291 @@
-Projectzero2 — Scrapy + Playwright + PostgreSQL
+<div align="center">
 
-Estructura creada dentro de `projectzero2`:
-- `projectzero2/` paquete Scrapy con `settings.py`, `pipelines.py`, `spiders/mi_spider.py`, `items.py`.
-- `Dockerfile`, `docker-compose.yml`, `requirements.txt`.
+# 🕷️ N1G Scraper
 
-Qué hace el proyecto
-- El spider `mi_spider` visita `https://httpbin.org/html` (ejemplo) y extrae: `url` y `titulo`.
-- Las pipelines persisten los items en tres destinos (orden configurado en `settings.py`):
-  - `PostgresPipeline`: inserta/actualiza en la tabla `items` de PostgreSQL (columnas: `id`, `url`, `titulo`, `precio`, `stock`, `raw`).
-  - `CsvPipeline`: añade filas a `/data/output.csv` (evita duplicados por `url`).
-  - `JsonIncrementalPipeline`: mantiene `/data/output.json` con todos los items (escritura atómica).
+### Web Scraping Profesional para n1g.cl
 
-Campos obtenidos (ejemplo)
-- `url`: URL de la página scrapeada.
-- `titulo` (o `titulo`): título extraído del HTML (`h1` en el ejemplo).
-- `precio`: campo preparado para sites de e-commerce (si tu spider extrae `precio`).
-- `stock`: campo preparado para disponibilidad (si tu spider extrae `stock`).
-- `raw`: JSON con el item completo guardado en la BD para referencia.
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Scrapy](https://img.shields.io/badge/Scrapy-2.13-60A839?style=for-the-badge&logo=scrapy&logoColor=white)](https://scrapy.org)
+[![Playwright](https://img.shields.io/badge/Playwright-1.47-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)](https://playwright.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Ready-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org)
 
-Construir y arrancar con Docker Compose (levanta Postgres y la app):
+<br>
 
-```powershell
-cd "C:\Users\Peruano Pinto\Desktop\proyectZERO\projectzero2"
-docker compose up --build
-```
+**Extrae productos, precios, stock e imágenes de todas las categorías de n1g.cl**
 
-Esto crea el servicio `db` (Postgres) y `app`. El `app` usa `DATABASE_URL` apuntando al servicio `db`.
+[🚀 Inicio Rápido](#-inicio-rápido) •
+[📖 Documentación](#-documentación) •
+[🏗️ Arquitectura](#️-arquitectura) •
+[📊 Salidas](#-salidas)
 
-Persistencia en host
-- Para acceder a los outputs en tu máquina, mueve el directorio `output` fuera o monta el volumen:
+</div>
 
-```powershell
-# ejemplo: crea carpeta output y monta en /data
-mkdir output
-docker compose up --build
-```
+---
 
-El `CsvPipeline` y `JsonIncrementalPipeline` escribirán en `./output/output.csv` y `./output/output.json`.
+## ✨ Características
 
-Notas y siguientes pasos
-- Si vas a scrapear sitios reales, adapta `mi_spider` con los selectores correctos (`titulo`, `precio`, `stock`).
-- Puedes añadir índices adicionales o normalizar datos antes de insertarlos (por ejemplo transformar `precio` a número).
-- Para esquemas más complejos crear modelos con SQLAlchemy declarative y migraciones (Alembic).
+| Feature | Descripción |
+|---------|-------------|
+| 🔄 **Multi-Categoría** | Scrapea todas las categorías automáticamente |
+| 🎭 **JavaScript Rendering** | Usa Playwright para contenido dinámico |
+| 💾 **Múltiples Salidas** | JSON, CSV y Base de Datos |
+| 📁 **JSON por Categoría** | Archivos separados para cada categoría |
+| 🛡️ **Anti-Bloqueo** | Headers realistas y delays configurables |
+| 🐳 **Docker Ready** | Despliegue con un comando |
+| 🧪 **Tests Incluidos** | Suite de pruebas con pytest |
 
-¿Deseas que:
-- adapte el spider para un site objetivo y los selectores reales?
-- añada migraciones con Alembic y scripts de inicialización?
-- exponga un pequeño script `manage_db.py` para consultar la BD desde el proyecto?
- - exponga un pequeño script `manage_db.py` para consultar la BD desde el proyecto? (ya añadido)
+---
 
-Gestión de la base de datos y outputs
+## 🚀 Inicio Rápido
 
-He añadido `manage_db.py` en la raíz del proyecto. Ejemplos de uso:
+### Opción 1: PowerShell (Recomendado para Windows)
 
 ```powershell
-# eliminar los ficheros de salida
-python manage_db.py --clean-output
+# 1️⃣ Clonar e ir al directorio
+cd projectzero2
 
-# truncar la tabla items (mantiene esquema)
-python manage_db.py --wipe-db --db postgresql://postgres:postgres@db:5432/projectzero
+# 2️⃣ Configurar entorno (solo primera vez)
+.\start.ps1 -Setup
 
-# borrar la tabla items
-python manage_db.py --drop-db --db postgresql://postgres:postgres@db:5432/projectzero
+# 3️⃣ Ejecutar scraping
+.\start.ps1
 ```
 
-Nota: ejecuta esos comandos desde dentro del contenedor o desde un entorno con acceso a la BD (por ejemplo ejecutar `docker compose run --rm app python manage_db.py ...` si usas docker-compose).
+### Opción 2: Python Script
 
-Nuevo spider para n1g.cl
+```bash
+# 1️⃣ Configurar entorno
+python run.py --setup
 
-He añadido `n1g_spider` para extraer productos desde `https://n1g.cl/Home/`.
+# 2️⃣ Ejecutar scraping completo
+python run.py
 
-Campos extraídos por defecto:
-- `url`: URL del producto.
-- `titulo`: título del producto.
-- `precio`: precio como número (si se detecta).
-- `stock`: 1 si parece disponible, 0 si aparece como agotado.
-- `category`: categoría principal (si hay breadcrumbs).
-- `description`: texto descriptivo.
-- `images`: lista de URLs de imágenes encontradas en la página.
-- `score`: calificación numérica (0-100) para priorizar/buscar rápidamente.
+# 3️⃣ O modo rápido (prueba)
+python run.py --quick
+```
 
-Scoring mejorado y campos adicionales
+### Opción 3: Docker
 
-He mejorado la heurística de `score` para que la calificación sea más útil sin convertir `precio`:
+```bash
+# Todo en un comando
+docker-compose up --build
+```
 
-- `stock`: si es un número lo uso como señal principal (hasta +50 puntos). Si solo aparece texto positivo, suma +40.
-- `images`: cada imagen suma hasta +20 puntos (máx. 4 imágenes * 5 puntos).
-- `description`: longitud de la descripción aporta hasta +15 puntos.
-- `promo keywords`: palabras como `oferta`, `descuento`, `rebaja`, `pack` suman puntos.
-- `precio`: se mantiene como cadena sin conversión (lo solicitaste). No se usa como número, solo su existencia puede ser señal.
+---
 
-Nuevo campo `stock_image`:
+## 📖 Documentación
 
-- El spider extrae `stock_image` buscando imágenes cercanas al indicador de stock (`.si-outer img`, `.product-stock img`, etc.). Este campo contiene la URL absoluta de la imagen relacionada al stock (si existe), para usar en interfaces o reportes más profesionales.
+### Comandos Disponibles
 
-Ejecución recomendada para la categoría `computacion`:
+| Comando | Descripción |
+|---------|-------------|
+| `.\start.ps1` | Scraping completo de todas las categorías |
+| `.\start.ps1 -Setup` | Configurar entorno (deps, DB, Chromium) |
+| `.\start.ps1 -Quick` | Modo rápido (2 páginas por categoría) |
+| `.\start.ps1 -Category "gaming"` | Solo categorías específicas |
+| `.\start.ps1 -Help` | Ver ayuda completa |
+
+### Categorías Disponibles
+
+```
+computacion  │  componentes  │  perifericos  │  monitores
+notebooks    │  almacenamiento  │  redes  │  gaming
+impresoras   │  accesorios
+```
+
+### Ejemplos de Uso
 
 ```powershell
-docker compose run --rm app scrapy crawl n1g_spider -a urls="https://n1g.cl/Home/2-computacion"
+# Scrapear solo gaming y computación
+.\start.ps1 -Category "gaming,computacion"
+
+# Prueba rápida de una categoría
+.\start.ps1 -Quick -Category "monitores"
+
+# Ejecutar con Scrapy directamente
+scrapy crawl categories -a max_pages=3 -a categories=gaming
 ```
 
-Salida y verificación
-- `./output/output.json`: lista completa de items con `score` y `stock_image`.
-- `./output/output.csv`: CSV con campos principales.
-- BD Postgres: tabla `items` con columna `raw` que contiene el item completo en JSON.
+---
 
-Si quieres que ajuste la heurística (por ejemplo dar más peso a descuentos reales detectados por la presencia de precio anterior tachado), pásame HTML de un producto con esos elementos y lo adapto exactamente.
+## 🏗️ Arquitectura
 
-Ejecución local sin Docker
-
-He añadido `run_local.ps1` en la raíz del proyecto para preparar un `virtualenv`, instalar Playwright y sus navegadores, y ejecutar el spider en modo local usando SQLite (por defecto).
-# Projectzero2 — Scrapy + Playwright + PostgreSQL
-
-¡Bienvenido a Projectzero2! Aquí tenemos un scraper elegante y práctico que usa Scrapy y Playwright para extraer productos y datos desde páginas dinámicas, normalizarlos y guardarlos en varios destinos.
-
-**Estado actual**
-- Spiders: `mi_spider` (demo) y `n1g_spider` (n1g.cl extractor).
-- Pipelines: normalización, scoring, Postgres upsert (o SQLite fallback), CSV y JSON incremental atómico.
-- Tests: suite con `pytest` que cubre parsers y pipelines.
-
-[![CI](https://github.com/blaspinto5/proyectzero/actions/workflows/ci.yml/badge.svg)](https://github.com/blaspinto5/proyectzero/actions)
-[![Pytest](https://img.shields.io/badge/tests-passing-brightgreen)](https://github.com/blaspinto5/proyectzero/actions)
-
-![demo](demo.svg)
-
-¿Por qué usar este proyecto?
-- Combina renderizado headless (Playwright) con la potencia de Scrapy.
-- Persistencia robusta: upsert en Postgres y salidas CSV/JSON limpias.
-- Preparado para CI y migraciones (Alembic ya configurado).
-
------
-
-## Rápido — Ejecutar en Windows (PowerShell)
-
-1) Clona y entra en el proyecto:
-
-```powershell
-cd "C:\Users\Peruano Pinto\Desktop\proyectZERO\projectzero2"
+```
+projectzero2/
+├── 📂 projectzero2/          # Código principal
+│   ├── 📂 spiders/           # Spiders de Scrapy
+│   │   ├── categories_spider.py   # 🌟 Spider maestro
+│   │   ├── n1g_spider.py          # Spider de productos
+│   │   └── n1g_product_spider.py  # Spider individual
+│   ├── items.py              # Definición de items
+│   ├── pipelines.py          # Procesamiento de datos
+│   ├── models.py             # Modelos SQLAlchemy
+│   └── settings.py           # Configuración
+│
+├── 📂 data/                  # Datos extraídos
+│   └── 📂 categories/        # JSONs por categoría
+│       ├── computacion.json
+│       ├── gaming.json
+│       └── _summary.json     # Resumen general
+│
+├── 📂 output/                # Salidas consolidadas
+│   ├── output.json           # Todos los productos
+│   └── output.csv            # Formato CSV
+│
+├── 📂 tests/                 # Tests automatizados
+├── 📂 alembic/               # Migraciones de DB
+├── 📂 scripts/               # Scripts auxiliares
+├── 📂 docs/                  # Documentación extra
+│
+├── 🚀 start.ps1              # Script PowerShell
+├── 🐍 run.py                 # Script Python
+├── 🐳 docker-compose.yml     # Docker
+├── 📋 requirements.txt       # Dependencias
+└── 📖 README.md              # Este archivo
 ```
 
-2) Virtualenv y dependencias:
+---
 
-```powershell
-python -m venv .venv
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
-pip install --upgrade pip
-pip install -r requirements.txt
-```
+## 📊 Salidas
 
-3) Instala navegadores Playwright (recomendado):
-
-```powershell
-python -m playwright install --with-deps chromium
-```
-
-4) Prepara la carpeta de salida (opcional):
-
-```powershell
-mkdir output
-```
-
-5) Ejecuta un spider:
-
-```powershell
-# demo
-scrapy crawl mi_spider
-
-# n1g (ejemplo de categoría)
-scrapy crawl n1g_spider -a urls="https://n1g.cl/Home/2-computacion"
-```
-
-Salida local por defecto:
-- `./output/output.json` — JSON incremental (escritura atómica).
-- `./output/output.csv` — CSV deduplicado.
-- `projectzero.db` — SQLite fallback si no hay `DATABASE_URL`.
-
------
-
-## Ejecutar con Docker (rápido)
-
-```powershell
-docker compose up --build
-
-# ejecutar un spider puntual dentro del contenedor
-docker compose run --rm app scrapy crawl n1g_spider -a urls="https://n1g.cl/Home/2-computacion"
-```
-
-El contenedor `app` ya instala Playwright y Chromium en build.
-
------
-
-## Migraciones (Alembic)
-
-Alembic está configurado. Por defecto apunta a `sqlite:///./projectzero.db`. Para aplicar la migración inicial:
-
-```powershell
-# opcional: usar Postgres
-$env:DATABASE_URL = "postgresql://postgres:postgres@db:5432/projectzero"
-alembic -c alembic.ini upgrade head
-```
-
------
-
-## Tests
-
-Ejecuta la suite de tests locales:
-
-```powershell
-pytest -q
-```
-
-Los tests verifican parsers (`parse_price`), `NormalizeItemPipeline`, `ScorePipeline`, `PostgresPipeline` (SQLite in-memory), `CsvPipeline` y `JsonIncrementalPipeline`.
-
------
-
-## Esquema de `items` (ejemplo y explicación)
-
-Campos principales (tabla `items`):
-
-- `id` (int): identificador autoincremental asignado por la BD.
-- `url` (string): URL única del producto.
-- `titulo` (text): título o nombre del producto.
-- `precio` (text): precio tal cual se extrajo (cadena). Puedes normalizarlo si lo deseas.
-- `stock` (text): valor numérico o indicador de disponibilidad.
-- `raw` (text): JSON serializado con el item completo para referencia.
-
-Ejemplo de objeto JSON que se guarda dentro de `raw`:
+### 1. JSON por Categoría (`data/categories/`)
 
 ```json
 {
-  "url": "https://n1g.cl/producto/ejemplo",
-  "titulo": "Placa madre XYZ",
-  "precio": "$ 129.990",
-  "stock": 5,
-  "stock_image": "https://n1g.cl/media/stock-badge.png",
-  "category": "Computación",
-  "description": "Placa madre compatible con...",
-  "images": ["https://n1g.cl/media/1.jpg", "https://n1g.cl/media/2.jpg"],
-  "score": 78
+  "category": "gaming",
+  "total_products": 150,
+  "scraped_at": "2026-02-02T12:00:00",
+  "products": [
+    {
+      "titulo": "ASUS ROG Strix RTX 4090",
+      "precio": "1899990",
+      "stock": 5,
+      "score": 85,
+      "images": ["url1", "url2"],
+      "description": "..."
+    }
+  ]
 }
 ```
 
-Nota: `PostgresPipeline` guarda la representación completa en `raw` y además mantiene columnas principales para búsquedas y ordenación rápidas.
+### 2. JSON Consolidado (`output/output.json`)
 
------
+Todos los productos de todas las categorías en un solo archivo.
 
-## CI
+### 3. CSV (`output/output.csv`)
 
-Incluí un workflow de GitHub Actions en `.github/workflows/ci.yml` que instala dependencias, Playwright y ejecuta `pytest`.
+| id | url | titulo | precio | stock | score |
+|----|-----|--------|--------|-------|-------|
+| 1 | https://... | ASUS RTX 4090 | 1899990 | 5 | 85 |
 
------
+### 4. Base de Datos SQLite/PostgreSQL
 
-## Archivos clave
-- `projectzero2/settings.py` — configuración Scrapy y pipelines.
-- `projectzero2/pipelines.py` — normalización, scoring y persistencia.
-- `projectzero2/spiders/n1g_spider.py` — extractor principal y `parse_price`.
-- `manage_db.py` — utilidades para limpiar outputs y manejar la tabla `items`.
-- `alembic/` — configuración y migración inicial.
+```sql
+SELECT * FROM items WHERE stock > 0 ORDER BY score DESC;
+```
 
------
+---
 
-¿Quieres que deje este `README` también en inglés, o que añada ejemplos con HTML de producto reales para ajustar selectores? Si quieres, puedo además:
+## ⚙️ Configuración
 
-- Añadir badges y un GIF corto mostrando el scraper en acción.
-- Documentar el esquema de la tabla `items` con ejemplos JSON.
-- Preparar un `Makefile` o script `inv` para comandos frecuentes.
+### Variables de Entorno
 
-¡Dime qué prefieres y lo hago!
+```bash
+# .env
+DATABASE_URL=postgresql://user:pass@localhost/n1g_db
+JSON_OUTPUT_FILE=/data/output.json
+CSV_OUTPUT_FILE=/data/output.csv
+DISABLE_PLAYWRIGHT=0  # 1 para deshabilitar JS rendering
+```
+
+### Settings de Scrapy
+
+```python
+# projectzero2/settings.py
+CONCURRENT_REQUESTS = 4          # Requests paralelos
+DOWNLOAD_DELAY = 0.5             # Delay entre requests
+RETRY_TIMES = 3                  # Reintentos
+LOG_LEVEL = "INFO"               # Nivel de log
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+# Ejecutar todos los tests
+pytest
+
+# Con cobertura
+pytest --cov=projectzero2
+
+# Test específico
+pytest tests/test_pipelines.py -v
+```
+
+---
+
+## 🐳 Docker
+
+### Desarrollo
+
+```bash
+docker-compose up
+```
+
+### Producción
+
+```bash
+docker-compose -f docker-compose.yml up -d
+```
+
+### Variables de Docker
+
+```yaml
+environment:
+  - DATABASE_URL=postgresql://postgres:postgres@db:5432/scraper
+  - LOG_LEVEL=INFO
+```
+
+---
+
+## 📈 Métricas y Monitoreo
+
+El spider genera estadísticas automáticamente:
+
+```json
+{
+  "stats": {
+    "categories_scraped": 10,
+    "products_scraped": 1500,
+    "start_time": "2026-02-02T10:00:00",
+    "end_time": "2026-02-02T10:30:00"
+  }
+}
+```
+
+---
+
+## 🤝 Contribuir
+
+1. Fork el repositorio
+2. Crea tu rama (`git checkout -b feature/nueva-feature`)
+3. Commit tus cambios (`git commit -am 'Add nueva feature'`)
+4. Push a la rama (`git push origin feature/nueva-feature`)
+5. Abre un Pull Request
+
+---
+
+## 📄 Licencia
+
+MIT License - ver [LICENSE](LICENSE) para detalles.
+
+---
+
+<div align="center">
+
+**Hecho con ❤️ usando Scrapy + Playwright**
+
+[⬆ Volver arriba](#-n1g-scraper)
+
+</div>

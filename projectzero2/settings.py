@@ -37,6 +37,17 @@ PLAYWRIGHT_LAUNCH_OPTIONS = {"headless": True}
 CONCURRENT_REQUESTS = 4
 LOG_LEVEL = "INFO"
 
+# User agent and headers to avoid bot detection
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+DEFAULT_REQUEST_HEADERS = {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+    "Accept-Language": "es-CL,es;q=0.9,en;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
+}
+
+# Allow 406 responses to be processed
+HTTPERROR_ALLOWED_CODES = [406]
+
 # Pipelines: normalize first, then persist to Postgres, CSV and JSON
 ITEM_PIPELINES = {
     "projectzero2.pipelines.NormalizeItemPipeline": 100,
@@ -46,11 +57,28 @@ ITEM_PIPELINES = {
     "projectzero2.pipelines.JsonIncrementalPipeline": 400,
 }
 
-# Output locations (mount /data in Docker)
-JSON_OUTPUT_FILE = "/data/output.json"
-CSV_OUTPUT_FILE = "/data/output.csv"
+# Output locations - use env vars or defaults that work locally and in Docker
+from pathlib import Path
+_project_root = Path(__file__).resolve().parent.parent
+_output_dir = _project_root / "output"
+_data_dir = _project_root / "data"
+
+# Asegurar que los directorios existen
+_output_dir.mkdir(exist_ok=True)
+_data_dir.mkdir(exist_ok=True)
+(_data_dir / "categories").mkdir(exist_ok=True)
+
+JSON_OUTPUT_FILE = os.environ.get("JSON_OUTPUT_FILE", str(_output_dir / "output.json"))
+CSV_OUTPUT_FILE = os.environ.get("CSV_OUTPUT_FILE", str(_output_dir / "output.csv"))
 
 # Database URL (override via env var). If not set, fall back to a local SQLite file
 # For full production use PostgreSQL and set DATABASE_URL accordingly.
-import os
-DATABASE_URL = os.environ.get("DATABASE_URL") if os.environ.get("DATABASE_URL") else "sqlite:///./projectzero.db"
+DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{_project_root}/projectzero.db")
+
+# Retry configuration for resilience
+RETRY_TIMES = 3
+RETRY_HTTP_CODES = [500, 502, 503, 504, 408, 429]
+
+# Download delay to be respectful
+DOWNLOAD_DELAY = 0.5
+RANDOMIZE_DOWNLOAD_DELAY = True

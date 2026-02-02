@@ -80,6 +80,15 @@ def extract_product(selector, base_url=None):
     if base_url and images:
         images = [urllib.parse.urljoin(base_url, x) for x in images]
 
+    # deduplicate images while preserving order
+    seen = set()
+    unique_images = []
+    for img in images:
+        if img not in seen:
+            seen.add(img)
+            unique_images.append(img)
+    images = unique_images
+
     return {
         "url": base_url or None,
         "titulo": title.strip() if title else None,
@@ -196,6 +205,7 @@ class N1GSpider(scrapy.Spider):
         item["score"] = score
 
         # keep compatibility key name used by pipelines
-        item["precio"] = item.get("price") or None
+        # Use price_content (numeric) if available, otherwise use price text
+        item["precio"] = item.get("price_content") or item.get("price") or None
 
         yield item
