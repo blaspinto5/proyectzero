@@ -9,15 +9,6 @@ param(
     [switch]$Help        # Mostrar ayuda
 )
 
-# Colores
-$colors = @{
-    Cyan = "Cyan"
-    Green = "Green"
-    Yellow = "Yellow"
-    Red = "Red"
-    Blue = "Blue"
-}
-
 function Write-Banner {
     Write-Host ""
     Write-Host "╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
@@ -45,7 +36,7 @@ function Write-Help {
     Write-Host ""
 }
 
-function Setup-Environment {
+function Initialize-Environment {
     Write-Host "`n🔧 CONFIGURANDO ENTORNO`n" -ForegroundColor Yellow
     
     Write-Host "▶ Instalando dependencias Python..." -ForegroundColor Blue
@@ -63,7 +54,7 @@ function Setup-Environment {
     Write-Host "`n✓ Entorno configurado correctamente`n" -ForegroundColor Green
 }
 
-function Run-Scraper {
+function Invoke-Scraper {
     Write-Host "`n🚀 INICIANDO SCRAPING`n" -ForegroundColor Yellow
     
     $args_list = @()
@@ -134,11 +125,11 @@ if (-not (Test-Path ".\scrapy.cfg")) {
 }
 
 if ($Setup) {
-    Setup-Environment
+    Initialize-Environment
     exit 0
 }
 
-Run-Scraper
+Invoke-Scraper
 Show-Results
 
 Write-Host "`n✅ Scraping completado`n" -ForegroundColor Green

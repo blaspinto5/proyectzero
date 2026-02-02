@@ -12,8 +12,7 @@
       "category": "computacion",
       "description": "CAJA ABIERTA PRODUCTO NUEVO. Rendimiento de IA: 439 AI TOPS. El modo OC aumenta el reloj a 2707 MHz. Desarrollado por la arquitectura NVIDIA Blackwell y DLSS 4.",
       "images": [
-        "https://n1g.cl/Home/15749-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg",
-        "https://n1g.cl/Home/15750-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15749-large_default/asus-prime-rtx-5050.jpg"
       ],
       "url": "https://n1g.cl/Home/computacion/rtx-5050"
     },
@@ -26,7 +25,7 @@
       "category": "computacion",
       "description": "Procesador de escritorio más potente de Intel. 24 núcleos (8P+16E), hasta 6.0GHz, 36MB Cache.",
       "images": [
-        "https://n1g.cl/Home/15751-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15760-large_default/intel-core-i9-14900k.jpg"
       ],
       "url": "https://n1g.cl/Home/computacion/i9-14900k"
     },
@@ -39,7 +38,7 @@
       "category": "computacion",
       "description": "El mejor procesador gaming del mundo. 16 núcleos, 32 hilos, tecnología 3D V-Cache de 128MB.",
       "images": [
-        "https://n1g.cl/Home/15752-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15761-large_default/amd-ryzen-9-7950x3d.jpg"
       ],
       "url": "https://n1g.cl/Home/computacion/ryzen-7950x3d"
     },
@@ -52,7 +51,7 @@
       "category": "computacion",
       "description": "Placa madre premium para Intel 14th Gen. DDR5, PCIe 5.0, WiFi 7, iluminación RGB sincronizada.",
       "images": [
-        "https://n1g.cl/Home/15753-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15762-large_default/asus-rog-maximus-z790.jpg"
       ],
       "url": "https://n1g.cl/Home/computacion/z790-hero"
     },
@@ -60,12 +59,12 @@
       "titulo": "Corsair RM1000x 1000W 80+ Gold Full Modular",
       "precio": "189990",
       "price_content": "189990",
-      "stock": 10,
-      "score": 82,
+      "stock": 6,
+      "score": 85,
       "category": "computacion",
-      "description": "Fuente de poder premium. 1000W, certificación 80+ Gold, completamente modular, ventilador Zero RPM.",
+      "description": "Fuente de poder premium. 1000W de potencia, certificación 80+ Gold, cables modulares, modo Zero RPM.",
       "images": [
-        "https://n1g.cl/Home/15754-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15763-large_default/corsair-rm1000x.jpg"
       ],
       "url": "https://n1g.cl/Home/computacion/rm1000x"
     }

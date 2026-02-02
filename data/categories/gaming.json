@@ -12,20 +12,20 @@
       "category": "gaming",
       "description": "La tarjeta gráfica más potente del mundo. Arquitectura Ada Lovelace, Ray Tracing de última generación, DLSS 3.0 con Frame Generation.",
       "images": [
-        "https://n1g.cl/Home/15749-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15749-large_default/asus-rog-strix-rtx-4090-oc.jpg"
       ],
       "url": "https://n1g.cl/Home/gaming/rtx-4090"
     },
     {
-      "titulo": "Corsair Vengeance RGB DDR5 32GB (2x16GB) 6000MHz CL36",
-      "precio": "189990",
-      "price_content": "189990",
-      "stock": 15,
+      "titulo": "Corsair Dominator Platinum RGB DDR5-6400 32GB (2x16GB)",
+      "precio": "219990",
+      "price_content": "219990",
+      "stock": 10,
       "score": 88,
       "category": "gaming",
-      "description": "Memoria RAM DDR5 de alto rendimiento con iluminación RGB dinámica. Optimizada para Intel y AMD.",
+      "description": "Memoria RAM de alto rendimiento DDR5. Iluminación RGB Capellix, disipador DHX de aluminio.",
       "images": [
-        "https://n1g.cl/Home/15750-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15750-large_default/corsair-dominator-ddr5.jpg"
       ],
       "url": "https://n1g.cl/Home/gaming/ddr5-corsair"
     },
@@ -38,20 +38,20 @@
       "category": "gaming",
       "description": "SSD ultrarrápido con velocidades de lectura de hasta 7,450 MB/s. Ideal para gaming y creación de contenido.",
       "images": [
-        "https://n1g.cl/Home/15751-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15751-large_default/samsung-990-pro-2tb.jpg"
       ],
       "url": "https://n1g.cl/Home/gaming/samsung-990-pro"
     },
     {
       "titulo": "Razer DeathAdder V3 Pro Wireless Gaming Mouse",
-      "precio": "129990",
-      "price_content": "129990",
-      "stock": 20,
-      "score": 85,
+      "precio": "159990",
+      "price_content": "159990",
+      "stock": 15,
+      "score": 90,
       "category": "gaming",
-      "description": "Mouse gaming inalámbrico profesional. Sensor Focus Pro 30K, 90 horas de batería, diseño ergonómico.",
+      "description": "Mouse ergonómico para gaming profesional. Sensor Focus Pro 30K, 90 horas de batería, peso de 63g.",
       "images": [
-        "https://n1g.cl/Home/15752-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15752-large_default/razer-deathadder-v3-pro.jpg"
       ],
       "url": "https://n1g.cl/Home/gaming/razer-deathadder"
     },
@@ -64,7 +64,7 @@
       "category": "gaming",
       "description": "Monitor OLED gaming premium. 27 pulgadas, 1440p, 240Hz, 0.03ms GtG, HDR True Black 400.",
       "images": [
-        "https://n1g.cl/Home/15753-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+        "https://n1g.cl/Home/15753-large_default/asus-rog-swift-oled.jpg"
       ],
       "url": "https://n1g.cl/Home/gaming/rog-oled-monitor"
     }

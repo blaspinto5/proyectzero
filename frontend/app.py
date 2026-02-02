@@ -40,11 +40,12 @@ class ImageLoader:
     
     _cache: Dict[str, Image.Image] = {}
     _loading: set = set()
+    _failed: set = set()  # URLs que ya fallaron
     
     @classmethod
     def load_async(cls, url: str, callback, size: tuple = (200, 200)):
         """Carga una imagen de forma asíncrona"""
-        if not url or url in cls._loading:
+        if not url or url in cls._loading or url in cls._failed:
             return
         
         if url in cls._cache:
@@ -63,14 +64,16 @@ class ImageLoader:
                 req = urllib.request.Request(url, headers={
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
                 })
-                with urllib.request.urlopen(req, timeout=10, context=ctx) as response:
+                # Timeout reducido a 3 segundos para no bloquear la UI
+                with urllib.request.urlopen(req, timeout=3, context=ctx) as response:
                     data = response.read()
                     image = Image.open(io.BytesIO(data))
                     image = image.resize(size, Image.Resampling.LANCZOS)
                     cls._cache[url] = image
                     callback(image)
-            except Exception as e:
-                print(f"Error cargando imagen: {e}")
+            except Exception:
+                # Silenciar errores - marcar como fallido para no reintentar
+                cls._failed.add(url)
             finally:
                 cls._loading.discard(url)
         

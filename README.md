@@ -14,11 +14,45 @@
 **Extrae productos, precios, stock e imágenes de todas las categorías de n1g.cl**
 
 [🚀 Inicio Rápido](#-inicio-rápido) •
+[� Requisitos](#-requisitos-del-sistema) •
 [📖 Documentación](#-documentación) •
-[🏗️ Arquitectura](#️-arquitectura) •
-[📊 Salidas](#-salidas)
+[🏗️ Arquitectura](#️-arquitectura)
 
 </div>
+
+---
+
+## 📋 Requisitos del Sistema
+
+> ⚠️ **IMPORTANTE:** Asegúrate de cumplir estos requisitos ANTES de intentar ejecutar el proyecto.
+
+### ✅ Lo que necesitas tener instalado
+
+| Requisito | Versión Mínima | ¿Cómo verificar? | ¿Dónde descargarlo? |
+|-----------|---------------|------------------|---------------------|
+| **Windows** | 10 o superior | Ya lo tienes si usas Windows | - |
+| **Python** | 3.10 o superior | Abre CMD y escribe: `python --version` | [python.org/downloads](https://www.python.org/downloads/) |
+| **pip** | Cualquiera | Viene con Python automáticamente | Se instala con Python |
+| **Git** | Cualquiera (opcional) | `git --version` | [git-scm.com](https://git-scm.com/download/win) |
+
+### 🔍 ¿No tienes Python instalado?
+
+1. Ve a [python.org/downloads](https://www.python.org/downloads/)
+2. Descarga la versión más reciente (botón amarillo grande)
+3. **MUY IMPORTANTE:** Al instalar, marca la casilla ✅ **"Add Python to PATH"**
+4. Reinicia tu computadora después de instalar
+
+### 💻 Requisitos de Hardware
+
+- **RAM:** Mínimo 4 GB (recomendado 8 GB)
+- **Espacio en disco:** 1 GB libre para el proyecto y navegador
+- **Internet:** Conexión estable para descargar imágenes y datos
+
+### 🌐 Requisitos de Red
+
+- El sitio web **n1g.cl debe estar accesible** desde tu conexión
+- Si usas VPN o proxy, el sitio podría bloquearte
+- Algunas redes corporativas bloquean el scraping
 
 ---
 
@@ -33,47 +67,67 @@
 | 🛡️ **Anti-Bloqueo** | Headers realistas y delays configurables |
 | 🐳 **Docker Ready** | Despliegue con un comando |
 | 🧪 **Tests Incluidos** | Suite de pruebas con pytest |
+| 🖥️ **Panel Visual** | Interfaz gráfica para ver los productos |
 
 ---
 
 ## 🚀 Inicio Rápido
 
-### Opción 1: PowerShell (Recomendado para Windows)
+### 📝 Instrucciones paso a paso (para principiantes)
 
+#### Paso 1: Abre PowerShell
+1. Presiona la tecla **Windows** en tu teclado
+2. Escribe **"PowerShell"**
+3. Haz clic en **"Windows PowerShell"** (el azul)
+
+#### Paso 2: Navega a la carpeta del proyecto
 ```powershell
-# 1️⃣ Clonar e ir al directorio
-cd projectzero2
+# Copia y pega este comando (cambia la ruta si es necesario):
+cd "C:\Users\TU_USUARIO\Desktop\proyectZERO\projectzero2"
+```
+> 💡 **Tip:** Reemplaza `TU_USUARIO` por tu nombre de usuario de Windows
 
-# 2️⃣ Configurar entorno (solo primera vez)
+#### Paso 3: Configura el entorno (solo la primera vez)
+```powershell
 .\start.ps1 -Setup
+```
+> ⏱️ Esto toma 2-5 minutos. Descarga las dependencias y el navegador.
 
-# 3️⃣ Ejecutar scraping
+#### Paso 4: Ejecuta el scraping
+```powershell
+# Para hacer un scraping completo:
 .\start.ps1
 
-# 4️⃣ Abrir panel de visualización
-.\panel.ps1
+# O para una prueba rápida (más rápido):
+.\start.ps1 -Quick
 ```
 
-### Opción 2: Python Script
+#### Paso 5: Ve los resultados en el panel visual
+```powershell
+.\panel.ps1
+```
+> 🖼️ Se abrirá una ventana con todos los productos organizados por categoría.
+
+---
+
+### 🐍 Opción alternativa: Usando Python directamente
+
+Si prefieres usar Python en lugar de PowerShell:
 
 ```bash
-# 1️⃣ Configurar entorno
+# Paso 1: Configurar (solo una vez)
 python run.py --setup
 
-# 2️⃣ Ejecutar scraping completo
+# Paso 2: Ejecutar scraping
 python run.py
 
-# 3️⃣ O modo rápido (prueba)
-python run.py --quick
-
-# 4️⃣ Abrir panel de visualización
+# Paso 3: Ver resultados
 python frontend/app.py
 ```
 
-### Opción 3: Docker
+### 🐳 Opción Docker (usuarios avanzados)
 
 ```bash
-# Todo en un comando
 docker-compose up --build
 ```
 
@@ -85,19 +139,48 @@ El proyecto incluye un **panel de escritorio** moderno para visualizar los produ
 
 ### Características del Panel
 - 🎨 Interfaz oscura moderna (CustomTkinter)
-- 📂 Navegación por categorías
-- 🔍 Búsqueda en tiempo real
-- 🖼️ Carga asíncrona de imágenes
-- 📊 Estadísticas en vivo
-- 💎 Vista detallada de cada producto
+- 📂 Navegación por categorías en el menú lateral
+- 🔍 Barra de búsqueda en tiempo real
+- 🖼️ Imágenes de productos (requiere conexión a n1g.cl)
+- 📊 Contador de productos y estadísticas
+- 💎 Click en cualquier producto para ver detalles
 
-### Abrir el Panel
+### Cómo abrir el Panel
 
 ```powershell
 .\panel.ps1
-# o directamente:
-python frontend/app.py
 ```
+
+> ⚠️ **Nota:** Las imágenes solo cargan si el sitio n1g.cl está disponible.
+
+---
+
+## ❓ Solución de Problemas Comunes
+
+### "No se reconoce el término 'python'"
+**Causa:** Python no está instalado o no está en el PATH.
+**Solución:** 
+1. Reinstala Python desde [python.org](https://python.org)
+2. **IMPORTANTE:** Marca "Add Python to PATH" durante la instalación
+3. Reinicia PowerShell
+
+### "No se puede cargar el archivo start.ps1"
+**Causa:** PowerShell bloquea scripts por seguridad.
+**Solución:** Ejecuta este comando primero:
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+### "Error 406" o "Timeout" al scrapear
+**Causa:** El sitio n1g.cl está bloqueando tu conexión.
+**Solución:** 
+- Espera unos minutos e intenta de nuevo
+- Verifica que puedas abrir n1g.cl en tu navegador
+- Si usas VPN, desactívala
+
+### "Las imágenes no cargan en el panel"
+**Causa:** El sitio n1g.cl no está disponible.
+**Solución:** Es normal, los datos del producto se muestran igual, solo sin imagen.
 
 ---
 
