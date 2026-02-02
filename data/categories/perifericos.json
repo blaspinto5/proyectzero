@@ -1,0 +1,59 @@
+{
+  "category": "perifericos",
+  "total_products": 4,
+  "scraped_at": "2026-02-02T12:00:00",
+  "products": [
+    {
+      "titulo": "Logitech G Pro X Superlight 2 Wireless Mouse",
+      "precio": "149990",
+      "price_content": "149990",
+      "stock": 12,
+      "score": 94,
+      "category": "perifericos",
+      "description": "El mouse gaming inalámbrico más ligero. Sensor HERO 2, menos de 60g, 95 horas de batería.",
+      "images": [
+        "https://n1g.cl/Home/15749-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/perifericos/gpro-superlight2"
+    },
+    {
+      "titulo": "Keychron Q1 Pro QMK Wireless Mechanical Keyboard",
+      "precio": "199990",
+      "price_content": "199990",
+      "stock": 7,
+      "score": 89,
+      "category": "perifericos",
+      "description": "Teclado mecánico premium. Cuerpo de aluminio, switches Gateron, hot-swappable, conexión triple.",
+      "images": [
+        "https://n1g.cl/Home/15750-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/perifericos/keychron-q1"
+    },
+    {
+      "titulo": "HyperX Cloud III Wireless Gaming Headset",
+      "precio": "129990",
+      "price_content": "129990",
+      "stock": 15,
+      "score": 86,
+      "category": "perifericos",
+      "description": "Audífono gaming inalámbrico. Audio espacial DTS, 120 horas de batería, micrófono con cancelación de ruido.",
+      "images": [
+        "https://n1g.cl/Home/15751-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/perifericos/cloud3-wireless"
+    },
+    {
+      "titulo": "Elgato Stream Deck MK.2 15 Keys LCD",
+      "precio": "159990",
+      "price_content": "159990",
+      "stock": 9,
+      "score": 88,
+      "category": "perifericos",
+      "description": "Control de streaming profesional. 15 teclas LCD personalizables, integración con OBS, Twitch, YouTube.",
+      "images": [
+        "https://n1g.cl/Home/15752-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/perifericos/stream-deck-mk2"
+    }
+  ]
+}

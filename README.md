@@ -49,6 +49,9 @@ cd projectzero2
 
 # 3️⃣ Ejecutar scraping
 .\start.ps1
+
+# 4️⃣ Abrir panel de visualización
+.\panel.ps1
 ```
 
 ### Opción 2: Python Script
@@ -62,6 +65,9 @@ python run.py
 
 # 3️⃣ O modo rápido (prueba)
 python run.py --quick
+
+# 4️⃣ Abrir panel de visualización
+python frontend/app.py
 ```
 
 ### Opción 3: Docker
@@ -69,6 +75,28 @@ python run.py --quick
 ```bash
 # Todo en un comando
 docker-compose up --build
+```
+
+---
+
+## 🖥️ Panel de Visualización
+
+El proyecto incluye un **panel de escritorio** moderno para visualizar los productos scrapeados.
+
+### Características del Panel
+- 🎨 Interfaz oscura moderna (CustomTkinter)
+- 📂 Navegación por categorías
+- 🔍 Búsqueda en tiempo real
+- 🖼️ Carga asíncrona de imágenes
+- 📊 Estadísticas en vivo
+- 💎 Vista detallada de cada producto
+
+### Abrir el Panel
+
+```powershell
+.\panel.ps1
+# o directamente:
+python frontend/app.py
 ```
 
 ---
@@ -83,6 +111,7 @@ docker-compose up --build
 | `.\start.ps1 -Setup` | Configurar entorno (deps, DB, Chromium) |
 | `.\start.ps1 -Quick` | Modo rápido (2 páginas por categoría) |
 | `.\start.ps1 -Category "gaming"` | Solo categorías específicas |
+| `.\panel.ps1` | Abrir panel de visualización |
 | `.\start.ps1 -Help` | Ver ayuda completa |
 
 ### Categorías Disponibles

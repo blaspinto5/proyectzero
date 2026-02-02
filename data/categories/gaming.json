@@ -1,0 +1,72 @@
+{
+  "category": "gaming",
+  "total_products": 5,
+  "scraped_at": "2026-02-02T12:00:00",
+  "products": [
+    {
+      "titulo": "ASUS ROG Strix GeForce RTX 4090 OC Edition 24GB GDDR6X",
+      "precio": "1899990",
+      "price_content": "1899990",
+      "stock": 3,
+      "score": 95,
+      "category": "gaming",
+      "description": "La tarjeta gráfica más potente del mundo. Arquitectura Ada Lovelace, Ray Tracing de última generación, DLSS 3.0 con Frame Generation.",
+      "images": [
+        "https://n1g.cl/Home/15749-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/gaming/rtx-4090"
+    },
+    {
+      "titulo": "Corsair Vengeance RGB DDR5 32GB (2x16GB) 6000MHz CL36",
+      "precio": "189990",
+      "price_content": "189990",
+      "stock": 15,
+      "score": 88,
+      "category": "gaming",
+      "description": "Memoria RAM DDR5 de alto rendimiento con iluminación RGB dinámica. Optimizada para Intel y AMD.",
+      "images": [
+        "https://n1g.cl/Home/15750-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/gaming/ddr5-corsair"
+    },
+    {
+      "titulo": "Samsung 990 PRO 2TB NVMe M.2 SSD PCIe 4.0",
+      "precio": "249990",
+      "price_content": "249990",
+      "stock": 8,
+      "score": 92,
+      "category": "gaming",
+      "description": "SSD ultrarrápido con velocidades de lectura de hasta 7,450 MB/s. Ideal para gaming y creación de contenido.",
+      "images": [
+        "https://n1g.cl/Home/15751-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/gaming/samsung-990-pro"
+    },
+    {
+      "titulo": "Razer DeathAdder V3 Pro Wireless Gaming Mouse",
+      "precio": "129990",
+      "price_content": "129990",
+      "stock": 20,
+      "score": 85,
+      "category": "gaming",
+      "description": "Mouse gaming inalámbrico profesional. Sensor Focus Pro 30K, 90 horas de batería, diseño ergonómico.",
+      "images": [
+        "https://n1g.cl/Home/15752-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/gaming/razer-deathadder"
+    },
+    {
+      "titulo": "ASUS ROG Swift OLED PG27AQDM 27\" 1440p 240Hz",
+      "precio": "799990",
+      "price_content": "799990",
+      "stock": 2,
+      "score": 98,
+      "category": "gaming",
+      "description": "Monitor OLED gaming premium. 27 pulgadas, 1440p, 240Hz, 0.03ms GtG, HDR True Black 400.",
+      "images": [
+        "https://n1g.cl/Home/15753-large_default/asus-prime-rtx-5050-8-gb-gddr6-oc-edition-lista-para-sff-pcie-50-8-gb-gddr6-hdmidp-21-25-ranuras.jpg"
+      ],
+      "url": "https://n1g.cl/Home/gaming/rog-oled-monitor"
+    }
+  ]
+}
